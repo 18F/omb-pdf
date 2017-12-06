@@ -17,6 +17,7 @@ class Style:
     def __init__(self, is_underlined, fontsize):
         self.is_underlined = is_underlined
         self.fontsize = fontsize
+        self.is_all_caps = False
 
     @classmethod
     def from_char(cls, char):
@@ -24,6 +25,8 @@ class Style:
 
     def complexity_score(self):
         score = 0
+        if self.is_all_caps:
+            score += 1
         if self.is_underlined:
             score += 1
         if self.fontsize.font.is_bold:
@@ -34,6 +37,7 @@ class Style:
 
     def __eq__(self, other):
         return (self.is_underlined == other.is_underlined and
+                self.is_all_caps == other.is_all_caps and
                 self.fontsize == other.fontsize)
 
     def __lt__(self, other):
@@ -45,23 +49,28 @@ class Style:
         return self.complexity_score() < other.complexity_score()
 
     def __hash__(self):
-        return hash((self.is_underlined, self.fontsize))
+        return hash((self.is_underlined, self.is_all_caps, self.fontsize))
 
     def __repr__(self):
         return (f'{self.__class__.__name__}('
                 f'is_underlined={self.is_underlined}, '
+                f'is_all_caps={self.is_all_caps}, '
                 f'fontsize={self.fontsize})')
 
 
 def get_heading_line_style(line):
     style = None
+    is_all_caps = True
     for char, text in line.iter_char_chunks():
         if not text.strip(): continue
         if style is not None:
             # This line has multiple styles, so we'll assume
             # (possibly incorrectly) that it can't be a heading.
             return None
+        if text != text.upper():
+            is_all_caps = False
         style = Style.from_char(char)
+    style.is_all_caps = is_all_caps
     return style
 
 
