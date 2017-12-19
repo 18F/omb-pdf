@@ -1,5 +1,7 @@
 [![CircleCI](https://circleci.com/gh/18F/omb-pdf.svg?style=svg)](https://circleci.com/gh/18F/omb-pdf)
 
+**UPDATE:** This repository has been migrated into the [OMB Policy Library][] and is no longer under active development.
+
 This repository contains some experimentation with Python's
 [pdfminer][] package, to see if it's useful in importing PDFs for
 the [OMB Policy Library][].
